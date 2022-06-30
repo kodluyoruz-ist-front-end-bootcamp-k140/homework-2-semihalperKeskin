@@ -1,0 +1,9 @@
+.form-select{
+    width: 15em;
+    display: inline-block;
+    margin-left: 75%;
+}
+span{
+    margin-left: 600px;
+    margin-right: 15px;
+}
