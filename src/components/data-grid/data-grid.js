@@ -6,6 +6,7 @@ export function DataGrid() {
 
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
+  const [order, setOrder] = useState("ASC")
 
   const [todo, setTodo] = useState(null)
 
@@ -20,16 +21,17 @@ export function DataGrid() {
       .then(response => {
         setItems(response)
         setLoading(false)
-    }).catch(e => {
-      console.log(e)
-      setLoading(false)
-    })
+      }).catch(e => {
+        console.log(e)
+        setLoading(false)
+      })
   }
 
   const renderBody = () => {
     return (
       <React.Fragment>
-        {items.sort((a, b) => b.id - a.id).map((item, i) => {
+        {/* items.sort((a, b) => b.id - a.id).map((item, i) => */}
+        {items.map((item, i) => {
           return (
             <tr key={i}>
               <th scope="row" >{item.id}</th>
@@ -48,24 +50,43 @@ export function DataGrid() {
 
   const renderTable = () => {
     return (
-    <>
-      <Button onClick={onAdd}>Ekle</Button>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Başlık</th>
-            <th scope="col">Durum</th>
-            <th scope="col">Aksiyonlar</th>
-          </tr>
-        </thead>
-        <tbody>
-          {renderBody()}
-        </tbody>
-      </table>
-    </>
+      <>
+        <Button onClick={onAdd}>Ekle</Button>
+        <table className="table">
+          <thead>
+            <tr>
+              <th onClick={() => sorting(items.id)} scope="col">
+                #
+              </th>
+              <th onClick={() => sorting(items.title)} scope="col">
+                Başlık
+              </th>
+              <th onClick={() => sorting(items.completed)} scope="col">
+                Durum
+              </th>
+              <th scope="col">Aksiyonlar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {renderBody()}
+          </tbody>
+        </table>
+      </>
     )
   }
+
+  /* Sorting Function */
+  const sorting = (col) => {
+    if (order === "ASC") {
+      const sorted = [...items].sort((a, b) => (a[col] > b[col] ? 1 : -1));
+      setOrder("DESC");
+      setItems(sorted);
+    } else {
+      const sorted = [...items].sort((a, b) => (a[col] > b[col] ? -1 : 1));
+      setOrder("ASC");
+      setItems(sorted);
+    }
+  };
 
   const saveChanges = () => {
 
@@ -105,7 +126,7 @@ export function DataGrid() {
       return
     }
     const index = items.findIndex(item => item.id == id)
-    
+
     setItems(items => {
       items.splice(index, 1)
       return [...items]
@@ -115,7 +136,7 @@ export function DataGrid() {
   const onEdit = (todo) => {
     setTodo(todo)
   }
-  
+
   const cancel = () => {
     setTodo(null)
   }
@@ -127,7 +148,7 @@ export function DataGrid() {
           title="Title"
           value={todo.title}
           onChange={e => setTodo(todos => {
-            return {...todos, title: e.target.value}
+            return { ...todos, title: e.target.value }
           })}
         />
         <FormItem
@@ -135,7 +156,7 @@ export function DataGrid() {
           title="Completed"
           value={todo.completed}
           onChange={e => setTodo(todos => {
-            return {...todos, completed: e.target.checked}
+            return { ...todos, completed: e.target.checked }
           })}
         />
         <Button onClick={saveChanges}>Kaydet</Button>
@@ -143,11 +164,11 @@ export function DataGrid() {
       </>
     )
   }
-  
+
   return (
     <>
-      { loading ? "Yükleniyor...." : (todo ? renderEditForm() : renderTable())}
-    
+      {loading ? "Yükleniyor...." : (todo ? renderEditForm() : renderTable())}
+
     </>
   )
 }
