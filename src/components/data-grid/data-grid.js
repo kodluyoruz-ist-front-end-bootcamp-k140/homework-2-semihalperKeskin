@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Button } from "../button"
 import { FormItem } from "../form-item"
+import Pagination from "../pagination/pagination"
 import "./style.css"
 
 export function DataGrid() {
@@ -9,6 +10,7 @@ export function DataGrid() {
   const [loading, setLoading] = useState(false)
   const [order, setOrder] = useState("ASC")
   const [itemPerPage, setItemPerPage] = useState(25)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const [todo, setTodo] = useState(null)
 
@@ -16,12 +18,18 @@ export function DataGrid() {
     loadData()
   }, [itemPerPage, setItemPerPage])
 
+  const indexOfLastItems = currentPage * itemPerPage;
+  const indexOfFirstItems = indexOfLastItems - itemPerPage;
+  const currentItems = items.slice(indexOfFirstItems, indexOfLastItems);
+  const totalPagesNum = Math.ceil(items.length / itemPerPage)
+
+
+
   const loadData = () => {
     setLoading(true)
     fetch("https://jsonplaceholder.typicode.com/todos")
       .then(x => x.json())
       .then(response => {
-        response.splice(itemPerPage)
         setItems(response)
         setLoading(false)
       }).catch(e => {
@@ -34,7 +42,7 @@ export function DataGrid() {
     return (
       <React.Fragment>
         {/* items.sort((a, b) => b.id - a.id).map((item, i) => */}
-        {items.map((item, i) => {
+        {currentItems.map((item, i) => {
           return (
             <tr key={i}>
               <th scope="row" >{item.id}</th>
@@ -56,13 +64,7 @@ export function DataGrid() {
       <>
 
         <Button onClick={onAdd}>Ekle</Button>
-        <span> Sıralama ölçütü seçiniz : </span>
-        <div class="btn-group" role="group" ariaLabel="Basic outlined example">
-          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 25})}>25</button>
-          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 50})}>50</button>
-          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 75})}>75</button>          
-          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 100})}>100</button>
-        </div>
+        
 
         <table className="table">
           <thead>
@@ -82,6 +84,15 @@ export function DataGrid() {
           <tbody>
             {renderBody()}
           </tbody>
+          <Pagination pages = {totalPagesNum} setCurrentPage={setCurrentPage} />
+
+          <span> Sıralama ölçütü seçiniz : </span>
+        <div class="btn-group" role="group" ariaLabel="Basic outlined example">
+          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 25})}>25</button>
+          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 50})}>50</button>
+          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 75})}>75</button>          
+          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 100})}>100</button>
+        </div>
         </table>
       </>
     )
