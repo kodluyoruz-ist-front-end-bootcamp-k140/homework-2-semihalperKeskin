@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react"
 import { Button } from "../button"
 import { FormItem } from "../form-item"
 import Pagination from "../pagination/pagination"
-import "./style.css"
+
 
 export function DataGrid() {
 
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
-  const [order, setOrder] = useState("ASC")
+  const [orderId, setOrderId] = useState("ASC")
+  const [orderTittle, setOrderTittle] = useState("ASC")
+  const [orderCompleted, setOrderCompleted] = useState("ASC")
   const [itemPerPage, setItemPerPage] = useState(25)
   const [currentPage, setCurrentPage] = useState(1)
 
@@ -69,13 +71,13 @@ export function DataGrid() {
         <table className="table">
           <thead>
             <tr>
-              <th onClick={() => sorting(items.id)} scope="col">
+              <th onClick={() => sortingId(items.id)} scope="col">
                 #
               </th>
-              <th onClick={() => sorting(items.title)} scope="col">
+              <th onClick={() => sortingTittle(items.title)} scope="col">
                 Başlık
               </th>
-              <th onClick={() => sorting(items.completed)} scope="col">
+              <th onClick={() => sortingCompleted(items.completed)} scope="col">
                 Durum
               </th>
               <th scope="col">Aksiyonlar</th>
@@ -99,17 +101,41 @@ export function DataGrid() {
   }
 
   /* Sorting Function */
-  const sorting = (col) => {
-    if (order === "ASC") {
-      const sorted = [...items].sort((a, b) => (a[col] > b[col] ? 1 : -1));
-      setOrder("DESC");
+  const sortingId = (col) => {
+    if (orderId === "ASC") {
+      const sorted = [...items].sort((a, b) => (a[col] - b[col]? 1 : -1));
+      setOrderId("DESC");
       setItems(sorted);
     } else {
-      const sorted = [...items].sort((a, b) => (a[col] > b[col] ? -1 : 1));
-      setOrder("ASC");
+      const sorted = [...items].sort((a, b) => (b[col] - a[col]? 1 : -1));
+      setOrderId("ASC");
       setItems(sorted);
     }
   };
+  const sortingTittle = (col) => {
+    if (orderTittle === "ASC") {
+      const sorted = [...items].sort((a, b) => (a.title < b.title ? -1 : 1));
+      setOrderTittle("DESC");
+      setItems(sorted);
+    } else {
+      const sorted = [...items].sort((b, a) => (a.title > b.title ? 1 : -1));
+      setOrderTittle("ASC");
+      setItems(sorted);
+    }
+  };
+
+  const sortingCompleted = (col) => {
+    if (orderCompleted === "ASC") {
+      const sorted = [...items].sort((a, b) => (a.completed < b.completed ? -1 : 1));
+      setOrderCompleted("DESC");
+      setItems(sorted);
+    } else {
+      const sorted = [...items].sort((b, a) => (a.completed > b.completed ? 1 : -1));
+      setOrderCompleted("ASC");
+      setItems(sorted);
+    }
+  };
+  
 
   const saveChanges = () => {
 
