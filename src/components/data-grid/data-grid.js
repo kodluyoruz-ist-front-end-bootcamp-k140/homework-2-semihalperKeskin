@@ -13,7 +13,6 @@ export function DataGrid() {
   const [orderCompleted, setOrderCompleted] = useState("ASC")
   const [itemPerPage, setItemPerPage] = useState(25)
   const [currentPage, setCurrentPage] = useState(1)
-
   const [todo, setTodo] = useState(null)
 
   useEffect(() => {
@@ -43,7 +42,6 @@ export function DataGrid() {
   const renderBody = () => {
     return (
       <React.Fragment>
-        {/* items.sort((a, b) => b.id - a.id).map((item, i) => */}
         {currentItems.map((item, i) => {
           return (
             <tr key={i}>
@@ -64,22 +62,15 @@ export function DataGrid() {
   const renderTable = () => {
     return (
       <>
-
         <Button onClick={onAdd}>Ekle</Button>
-        
-
         <table className="table">
           <thead>
             <tr>
-              <th onClick={() => sortingId(items.id)} scope="col">
-                #
-              </th>
+              <th  scope="col" onClick={() => sortingId(items.id)}>#</th>
               <th onClick={() => sortingTittle(items.title)} scope="col">
                 Başlık
               </th>
-              <th onClick={() => sortingCompleted(items.completed)} scope="col">
-                Durum
-              </th>
+              <th  scope="col" onClick={() => sortingCompleted(items.completed)}>Durum</th>
               <th scope="col">Aksiyonlar</th>
             </tr>
           </thead>
@@ -103,22 +94,22 @@ export function DataGrid() {
   /* Sorting Function */
   const sortingId = (col) => {
     if (orderId === "ASC") {
-      const sorted = [...items].sort((a, b) => (a[col] - b[col]? 1 : -1));
+      const sorted = [...currentItems].sort((a, b) => (a.id - b.id? 1 : -1));
       setOrderId("DESC");
       setItems(sorted);
-    } else {
-      const sorted = [...items].sort((a, b) => (b[col] - a[col]? 1 : -1));
+    } else if (orderTittle === "DESC"){
+      const sorted = [...currentItems].sort((a, b) => (b[col] - a[col]? 1 : -1));
       setOrderId("ASC");
       setItems(sorted);
     }
   };
   const sortingTittle = (col) => {
     if (orderTittle === "ASC") {
-      const sorted = [...items].sort((a, b) => (a.title < b.title ? -1 : 1));
+      const sorted = [...currentItems].sort((a, b) => (a.title < b.title ? -1 : 1));
       setOrderTittle("DESC");
       setItems(sorted);
-    } else {
-      const sorted = [...items].sort((b, a) => (a.title > b.title ? 1 : -1));
+    } else  if (orderTittle === "DESC") {
+      const sorted = [...currentItems].sort((a, b) => (a.title > b.title ? -1 : 1));
       setOrderTittle("ASC");
       setItems(sorted);
     }
@@ -126,11 +117,11 @@ export function DataGrid() {
 
   const sortingCompleted = (col) => {
     if (orderCompleted === "ASC") {
-      const sorted = [...items].sort((a, b) => (a.completed < b.completed ? -1 : 1));
+      const sorted = [...currentItems].sort((a, b) => (a.completed < b.completed ? -1 : 1));
       setOrderCompleted("DESC");
       setItems(sorted);
-    } else {
-      const sorted = [...items].sort((b, a) => (a.completed > b.completed ? 1 : -1));
+    } else if (orderCompleted === "DESC"){
+      const sorted = [...currentItems].sort((a, b) => (a.completed > b.completed ? -1 : 1));
       setOrderCompleted("ASC");
       setItems(sorted);
     }
