@@ -14,6 +14,7 @@ export function DataGrid() {
   const [itemPerPage, setItemPerPage] = useState(25)
   const [currentPage, setCurrentPage] = useState(1)
   const [todo, setTodo] = useState(null)
+  
 
   useEffect(() => {
     loadData()
@@ -23,8 +24,6 @@ export function DataGrid() {
   const indexOfFirstItems = indexOfLastItems - itemPerPage;
   const currentItems = items.slice(indexOfFirstItems, indexOfLastItems);
   const totalPagesNum = Math.ceil(items.length / itemPerPage)
-
-
 
   const loadData = () => {
     setLoading(true)
@@ -67,7 +66,7 @@ export function DataGrid() {
           <thead>
             <tr>
               <th  scope="col" onClick={() => sortingId(items.id)}>#</th>
-              <th onClick={() => sortingTittle(items.title)} scope="col">
+              <th  onClick={() => sortingTittle(items.title)} scope="col">
                 Başlık
               </th>
               <th  scope="col" onClick={() => sortingCompleted(items.completed)}>Durum</th>
@@ -77,39 +76,41 @@ export function DataGrid() {
           <tbody>
             {renderBody()}
           </tbody>
+          </table>
           <Pagination pages = {totalPagesNum} setCurrentPage={setCurrentPage} />
 
           <span> Sıralama ölçütü seçiniz : </span>
         <div class="btn-group" role="group" ariaLabel="Basic outlined example">
           <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 25})}>25</button>
-          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 50})}>50</button>
+          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(50)}>50</button>
           <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 75})}>75</button>          
           <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 100})}>100</button>
         </div>
-        </table>
+        
       </>
     )
   }
 
+
   /* Sorting Function */
   const sortingId = (col) => {
     if (orderId === "ASC") {
-      const sorted = [...currentItems].sort((a, b) => (a.id - b.id? 1 : -1));
+      const sorted =  [...items].sort((a, b) => (a.id < b.id ? -1 : 1));
       setOrderId("DESC");
       setItems(sorted);
-    } else if (orderTittle === "DESC"){
-      const sorted = [...currentItems].sort((a, b) => (b[col] - a[col]? 1 : -1));
+    } else if (orderId === "DESC"){
+      const sorted = [...items].sort((a, b) =>  (a.id > b.id ? -1 : 1));
       setOrderId("ASC");
       setItems(sorted);
     }
   };
   const sortingTittle = (col) => {
     if (orderTittle === "ASC") {
-      const sorted = [...currentItems].sort((a, b) => (a.title < b.title ? -1 : 1));
+      const sorted = [...items].sort((a, b) => (a.title < b.title ? -1 : 1));
       setOrderTittle("DESC");
       setItems(sorted);
     } else  if (orderTittle === "DESC") {
-      const sorted = [...currentItems].sort((a, b) => (a.title > b.title ? -1 : 1));
+      const sorted = [...items].sort((a, b) => (a.title > b.title ? -1 : 1));
       setOrderTittle("ASC");
       setItems(sorted);
     }
@@ -117,11 +118,11 @@ export function DataGrid() {
 
   const sortingCompleted = (col) => {
     if (orderCompleted === "ASC") {
-      const sorted = [...currentItems].sort((a, b) => (a.completed < b.completed ? -1 : 1));
+      const sorted = [...items].sort((a, b) => (a.completed < b.completed ? -1 : 1));
       setOrderCompleted("DESC");
       setItems(sorted);
     } else if (orderCompleted === "DESC"){
-      const sorted = [...currentItems].sort((a, b) => (a.completed > b.completed ? -1 : 1));
+      const sorted = [...items].sort((a, b) => (a.completed > b.completed ? -1 : 1));
       setOrderCompleted("ASC");
       setItems(sorted);
     }
