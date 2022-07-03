@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./style.css";
 
 const Pagination = ({pages, setCurrentPage}) => {
 
@@ -17,7 +18,6 @@ const Pagination = ({pages, setCurrentPage}) => {
 
     return (
         <div className="clearfix container">
-            <div className="hint-text">Showing <b>5</b> out of <b>25</b>entries</div>
             <ul className="pagination">
                 <li className={`${currentButton === 1 ? "page-item disabled" : "page-item"}`}><a href="#!"
                     className="page-link" onClick={() => { setCurrentButton(prev => prev === 1 ? prev : prev - 1) }}

@@ -2,17 +2,21 @@ import React, { useEffect, useState } from "react"
 import { Button } from "../button"
 import { FormItem } from "../form-item"
 import Pagination from "../pagination/pagination"
+import "./style.css"
 
 
 export function DataGrid() {
 
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
+
   const [orderId, setOrderId] = useState("ASC")
   const [orderTittle, setOrderTittle] = useState("ASC")
   const [orderCompleted, setOrderCompleted] = useState("ASC")
+
   const [itemPerPage, setItemPerPage] = useState(25)
   const [currentPage, setCurrentPage] = useState(1)
+  
   const [todo, setTodo] = useState(null)
   
 
@@ -25,6 +29,7 @@ export function DataGrid() {
   const currentItems = items.slice(indexOfFirstItems, indexOfLastItems);
   const totalPagesNum = Math.ceil(items.length / itemPerPage)
 
+  
   const loadData = () => {
     setLoading(true)
     fetch("https://jsonplaceholder.typicode.com/todos")
@@ -61,11 +66,21 @@ export function DataGrid() {
   const renderTable = () => {
     return (
       <>
-        <Button onClick={onAdd}>Ekle</Button>
+        <Button className="added" onClick={onAdd}>Ekle <i className="fa-solid fa-plus"></i></Button>
+        <br></br>
+        <div className="buttonNum">
+        <span> Sıralama ölçütü seçiniz : </span>
+        <div class="btn-group" role="group" ariaLabel="Basic outlined example">
+          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 25})}>25</button>
+          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(50)}>50</button>
+          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 75})}>75</button>          
+          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 100})}>100</button>
+        </div>
+        </div>
         <table className="table">
           <thead>
             <tr>
-              <th  scope="col" onClick={() => sortingId(items.id)}>#</th>
+              <th  scope="col" onClick={() => sortingId(items.id)}># </th>
               <th  onClick={() => sortingTittle(items.title)} scope="col">
                 Başlık
               </th>
@@ -77,23 +92,14 @@ export function DataGrid() {
             {renderBody()}
           </tbody>
           </table>
-          <Pagination pages = {totalPagesNum} setCurrentPage={setCurrentPage} />
-
-          <span> Sıralama ölçütü seçiniz : </span>
-        <div class="btn-group" role="group" ariaLabel="Basic outlined example">
-          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 25})}>25</button>
-          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(50)}>50</button>
-          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 75})}>75</button>          
-          <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 100})}>100</button>
-        </div>
-        
+          <Pagination pages = {totalPagesNum} setCurrentPage={setCurrentPage} />        
       </>
     )
   }
 
 
   /* Sorting Function */
-  const sortingId = (col) => {
+  const sortingId = () => {
     if (orderId === "ASC") {
       const sorted =  [...items].sort((a, b) => (a.id < b.id ? -1 : 1));
       setOrderId("DESC");
@@ -104,7 +110,7 @@ export function DataGrid() {
       setItems(sorted);
     }
   };
-  const sortingTittle = (col) => {
+  const sortingTittle = () => {
     if (orderTittle === "ASC") {
       const sorted = [...items].sort((a, b) => (a.title < b.title ? -1 : 1));
       setOrderTittle("DESC");
@@ -116,7 +122,7 @@ export function DataGrid() {
     }
   };
 
-  const sortingCompleted = (col) => {
+  const sortingCompleted = () => {
     if (orderCompleted === "ASC") {
       const sorted = [...items].sort((a, b) => (a.completed < b.completed ? -1 : 1));
       setOrderCompleted("DESC");
