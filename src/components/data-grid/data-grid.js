@@ -10,10 +10,12 @@ export function DataGrid() {
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
 
+  // sorting işlemleri için belirleyici kıstaslar
   const [orderId, setOrderId] = useState("ASC")
   const [orderTittle, setOrderTittle] = useState("ASC")
   const [orderCompleted, setOrderCompleted] = useState("ASC")
 
+  // pagination stateleri
   const [itemPerPage, setItemPerPage] = useState(25)
   const [currentPage, setCurrentPage] = useState(1)
   
@@ -24,6 +26,7 @@ export function DataGrid() {
     loadData()
   }, [itemPerPage, setItemPerPage])
 
+  // sayfalandırma ölçütlerinin hesaplanması
   const indexOfLastItems = currentPage * itemPerPage;
   const indexOfFirstItems = indexOfLastItems - itemPerPage;
   const currentItems = items.slice(indexOfFirstItems, indexOfLastItems);
@@ -69,6 +72,7 @@ export function DataGrid() {
         <Button className="added" onClick={onAdd}>Ekle <i className="fa-solid fa-plus"></i></Button>
         <br></br>
         <div className="buttonNum">
+          {/* Table yapısında listelenecek items sayısı seçme butonları */}
         <span> Sıralama ölçütü seçiniz : </span>
         <div class="btn-group" role="group" ariaLabel="Basic outlined example">
           <button type="button" className="btn btn-outline-primary" onClick={()=> setItemPerPage(()=>{return 25})}>25</button>
@@ -92,13 +96,14 @@ export function DataGrid() {
             {renderBody()}
           </tbody>
           </table>
+          {/* sayfalandırma componenti */}
           <Pagination pages = {totalPagesNum} setCurrentPage={setCurrentPage} />        
       </>
     )
   }
 
 
-  /* Sorting Function */
+  /* id, tittle ve completed'a göre sorting işlemleri */
   const sortingId = () => {
     if (orderId === "ASC") {
       const sorted =  [...items].sort((a, b) => (a.id < b.id ? -1 : 1));

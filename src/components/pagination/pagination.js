@@ -15,7 +15,8 @@ const Pagination = ({pages, setCurrentPage}) => {
      useEffect(() => {
          setCurrentPage(currentButton)
      }, [currentButton, setCurrentPage])
-
+    
+     //pagination jsx leri
     return (
         <div className="clearfix container">
             <ul className="pagination">
