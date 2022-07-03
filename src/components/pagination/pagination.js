@@ -6,6 +6,7 @@ const Pagination = ({pages, setCurrentPage}) => {
 
     const numOfPages = [];
 
+    // items a göre sayfa  sayısı belirleme
     for (let i = 1; i <= pages; i++) {
         numOfPages.push(i)
     }
