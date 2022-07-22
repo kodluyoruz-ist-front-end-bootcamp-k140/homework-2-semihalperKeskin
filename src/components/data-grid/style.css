@@ -1,0 +1,27 @@
+.buttonNum{
+    text-align:end;
+    margin-bottom: 15px;
+}
+.added{
+    text-align:start;
+    margin-bottom: 15px;
+    border: none;
+    background-color: #F6416C;
+    padding: 5px 20px;
+    border-radius: 6px;
+}
+.added i {
+    font-size: 15px;
+}
+table {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bolder;
+    font-size: 1.2rem;
+}
+.btn-group .btn:hover{
+    background-color: #FFDE7D;
+    border-color: #FFDE7D;
+}
+.btn-group .btn{
+    border-color: #F6416C;
+}

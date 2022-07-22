@@ -1,0 +1,11 @@
+.navbar {
+    background-color: #00B8A9;
+    
+}
+.navbar a{
+    font-family: 'Gentium Book Plus', serif;
+    font-size: 1.5rem;
+}
+i {
+    font-size: 2rem;
+}
